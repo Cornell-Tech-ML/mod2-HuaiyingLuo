@@ -156,9 +156,9 @@ def strides_from_shape(shape: UserShape) -> UserStrides:
 
 
 class TensorData:
-    _storage: Storage # private implementation
-    _strides: Strides # private implementation
-    _shape: Shape # private implementation
+    _storage: Storage # private attribute
+    _strides: Strides # private attribute
+    _shape: Shape # private attribute
     strides: UserStrides # public user interface
     shape: UserShape # public user interface
     dims: int # public user interface
@@ -273,8 +273,8 @@ class TensorData:
 
         # TODO: Implement for Task 2.1.
         # Reorder shape and strides according to the order
-        new_shape = tuple(self.shape[i] for i in order)
-        new_strides = tuple(self.strides[i] for i in order)
+        new_shape = tuple(self._shape[i] for i in order)
+        new_strides = tuple(self._strides[i] for i in order)
 
         # Return a new TensorData object with permuted dimensions
         return TensorData(self._storage, new_shape, new_strides)

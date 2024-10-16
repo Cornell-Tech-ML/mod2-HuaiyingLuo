@@ -70,6 +70,11 @@ def to_index(ordinal: int, shape: Shape, out_index: OutIndex) -> None:
         out_index[i] = curr_ordinal % shape[i]
         curr_ordinal = curr_ordinal // shape[i]
 
+"""
+Two tensors are “broadcastable” if the following rules hold:
+Each tensor has at least one dimension.
+When iterating over the dimension sizes, starting at the trailing dimension, the dimension sizes must either be equal, one of them is 1, or one of them does not exist.
+"""
 
 def broadcast_index(
     big_index: Index, big_shape: Shape, shape: Shape, out_index: OutIndex
@@ -84,14 +89,22 @@ def broadcast_index(
         big_index : multidimensional index of bigger tensor
         big_shape : tensor shape of bigger tensor
         shape : tensor shape of smaller tensor
-        out_index : multidimensional index of smaller tensor
+        out_index : multidimensional index of smaller tensor. out_index is an array that represents the corresponding index in the smaller tensor of the big tensor indexafter applying broadcasting rules 
 
     Returns:
         None
 
     """
     # TODO: Implement for Task 2.2.
-    raise NotImplementedError("Need to implement for Task 2.2")
+    for i, shp in enumerate(shape):
+        big_dim = big_shape[i + len(big_shape) - len(shape)]
+        if shp != big_dim and shp != 1 and big_dim != 1:
+            raise IndexingError(f"Cannot broadcast shape {shape} to {big_shape}.")
+        if shp > 1:
+            out_index[i] = big_index[big_dim]
+        else:
+            out_index[i] = 0
+      
 
 
 def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
@@ -109,7 +122,27 @@ def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
 
     """
     # TODO: Implement for Task 2.2.
-    raise NotImplementedError("Need to implement for Task 2.2")
+    # Reverse the shapes to align dimensions from the end
+    shape1 = list(shape1)[::-1]
+    shape2 = list(shape2)[::-1]
+
+    # Determine the maximum length of the two shapes
+    max_len = max(len(shape1), len(shape2))
+
+    # Extend the shorter shape with 1s
+    shape1.extend([1] * (max_len - len(shape1)))
+    shape2.extend([1] * (max_len - len(shape2)))
+
+    # Calculate the broadcasted shape
+    broadcasted_shape = []
+    for dim1, dim2 in zip(shape1, shape2):
+        if dim1 == dim2 or dim1 == 1 or dim2 == 1:
+            broadcasted_shape.append(max(dim1, dim2))
+        else:
+            raise IndexingError(f"Cannot broadcast shapes {shape1[::-1]} and {shape2[::-1]}.")
+
+    # Reverse the result to restore the original order
+    return tuple(broadcasted_shape[::-1])
 
 
 def strides_from_shape(shape: UserShape) -> UserStrides:

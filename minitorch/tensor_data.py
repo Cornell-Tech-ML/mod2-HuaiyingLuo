@@ -45,7 +45,10 @@ def index_to_position(index: Index, strides: Strides) -> int:
 
     """
     # TODO: Implement for Task 2.1.
-    raise NotImplementedError("Need to implement for Task 2.1")
+    position = 0
+    for index, stride in zip(index, strides):
+        position += index * stride
+    return position
 
 
 def to_index(ordinal: int, shape: Shape, out_index: OutIndex) -> None:
@@ -53,6 +56,7 @@ def to_index(ordinal: int, shape: Shape, out_index: OutIndex) -> None:
     Should ensure that enumerating position 0 ... size of a
     tensor produces every index exactly once. It
     may not be the inverse of `index_to_position`.
+    Modify the out_index array in place.
 
     Args:
         ordinal: ordinal position to convert.
@@ -61,7 +65,10 @@ def to_index(ordinal: int, shape: Shape, out_index: OutIndex) -> None:
 
     """
     # TODO: Implement for Task 2.1.
-    raise NotImplementedError("Need to implement for Task 2.1")
+    curr_ordinal = ordinal
+    for i in range(len(shape) - 1, -1, -1):
+        out_index[i] = curr_ordinal % shape[i]
+        curr_ordinal = curr_ordinal // shape[i]
 
 
 def broadcast_index(
@@ -116,12 +123,12 @@ def strides_from_shape(shape: UserShape) -> UserStrides:
 
 
 class TensorData:
-    _storage: Storage
-    _strides: Strides
-    _shape: Shape
-    strides: UserStrides
-    shape: UserShape
-    dims: int
+    _storage: Storage # private implementation
+    _strides: Strides # private implementation
+    _shape: Shape # private implementation
+    strides: UserStrides # public user interface
+    shape: UserShape # public user interface
+    dims: int # public user interface
 
     def __init__(
         self,
@@ -232,7 +239,12 @@ class TensorData:
         ), f"Must give a position to each dimension. Shape: {self.shape} Order: {order}"
 
         # TODO: Implement for Task 2.1.
-        raise NotImplementedError("Need to implement for Task 2.1")
+        # Reorder shape and strides according to the order
+        new_shape = tuple(self.shape[i] for i in order)
+        new_strides = tuple(self.strides[i] for i in order)
+
+        # Return a new TensorData object with permuted dimensions
+        return TensorData(self._storage, new_shape, new_strides)
 
     def to_string(self) -> str:
         """Convert to string"""

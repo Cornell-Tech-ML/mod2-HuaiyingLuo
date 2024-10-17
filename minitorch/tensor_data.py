@@ -96,16 +96,12 @@ def broadcast_index(
 
     """
     # TODO: Implement for Task 2.2.
-    for i, shp in enumerate(shape):
-        big_dim = big_shape[i + len(big_shape) - len(shape)]
-        if shp != big_dim and shp != 1 and big_dim != 1:
-            raise IndexingError(f"Cannot broadcast shape {shape} to {big_shape}.")
-        if shp > 1:
-            out_index[i] = big_index[big_dim]
+    for i in range(len(shape)):
+        if shape[i] != 1:
+            out_index[i] = big_index[i + len(big_shape) - len(shape)]
         else:
             out_index[i] = 0
       
-
 
 def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
     """Broadcast two shapes to create a new union shape.

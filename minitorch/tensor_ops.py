@@ -263,15 +263,13 @@ def tensor_map(
     ) -> None:
         # TODO: Implement for Task 2.3.
         # Broadcasted version
-        out_index: Index = np.array([0] * len(out_shape), dtype=np.int32)
-        in_index: Index = np.array([0] * len(in_shape), dtype=np.int32)
+        out_index = np.array(out_shape)
+        in_index = np.array(in_shape)
+
         for i in range(len(out)):
             to_index(i, out_shape, out_index)
-            # in_shape` must be smaller than `out_shape
             broadcast_index(out_index, out_shape, in_shape, in_index)
-            out_pos = index_to_position(out_index, out_strides)
-            in_pos = index_to_position(out_index, in_strides)
-            out[out_pos] = fn(in_storage[in_pos])  
+            out[index_to_position(out_index, out_strides)] = fn(in_storage[index_to_position(in_index, in_strides)])
 
     return _map
 
@@ -317,17 +315,17 @@ def tensor_zip(
     ) -> None:
         # TODO: Implement for Task 2.3.
         # Broadcasted version
-        out_index: Index = np.array([0] * len(out_shape), dtype=np.int32)
-        a_index: Index = np.array([0] * len(a_shape), dtype=np.int32)
-        b_index: Index = np.array([0] * len(b_shape), dtype=np.int32)
+        a_index = np.array(a_shape)
+        b_index = np.array(b_shape)
+        out_index = np.array(out_shape)
+
         for i in range(len(out)):
-            to_index(i, out_shape, out_index) 
-            out_pos = index_to_position(out_index, out_strides)
+            to_index(i, out_shape, out_index)
             broadcast_index(out_index, out_shape, a_shape, a_index)
-            a_pos = index_to_position(a_index, a_strides)
             broadcast_index(out_index, out_shape, b_shape, b_index)
-            b_pos = index_to_position(b_index, b_strides)
-            out[out_pos] = fn(a_storage[a_pos], b_storage[b_pos])
+            a_data = a_storage[index_to_position(a_index, a_strides)]
+            b_data = b_storage[index_to_position(b_index, b_strides)]
+            out[index_to_position(out_index, out_strides)] = fn(a_data, b_data)
 
     return _zip
 
@@ -359,15 +357,16 @@ def tensor_reduce(
     ) -> None:
         # TODO: Implement for Task 2.3.
         # Low-level Implementation
-        out_index: Index = np.array([0] * len(out_shape), dtype=np.int32)
-        reduce_size = a_shape[reduce_dim] # this is the size of the reduce dimension to be reduced to 1
-        for i in range(len(out)):
-            to_index(i, out_shape, out_index)
-            out_pos = index_to_position(out_index, out_strides)
-            for j in range(reduce_size):
-                out_index[reduce_dim] = j
-                a_pos = index_to_position(out_index, a_strides)
-                out[out_pos] = fn(out[out_pos], a_storage[a_pos])           
+        out_index = np.array(out_shape)
+        a_index = out_index
+        dim = a_shape[reduce_dim]
+        for p in range(len(out)):
+            to_index(p, out_shape, out_index)
+            o = index_to_position(out_index, out_strides)
+            for s in range(dim):
+                a_index[reduce_dim] = s
+                a_data = a_storage[index_to_position(a_index, a_strides)]
+                out[o] = fn(out[o], a_data)
 
     return _reduce
 

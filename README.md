@@ -1,3 +1,4 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/YFgwt0yY)
 # MiniTorch Module 2
 
 <img src="https://minitorch.github.io/minitorch.svg" width="50%">
@@ -16,3 +17,70 @@ python sync_previous_module.py previous-module-dir current-module-dir
 The files that will be synced are:
 
         minitorch/operators.py minitorch/module.py minitorch/autodiff.py minitorch/scalar.py minitorch/scalar_functions.py minitorch/module.py project/run_manual.py project/run_scalar.py project/datasets.py
+
+
+## Setup
+
+MiniTorch requires Python 3.11 or higher. To check your version of Python, run either:
+```
+python3 --version
+```
+or
+```
+python --version
+```
+
+To create a virtual environment, run:
+```
+python3.11 -m venv .venv
+```
+
+To activate the virtual environment use:
+```
+source .venv/bin/activate
+```
+To deactivate the virtual environment use:
+```
+deactivate
+```
+
+To install packages use:
+```
+python3 -m pip install -r requirements.txt
+python3 -m pip install -r requirements.extra.txt
+python3 -m pip install -Ue .
+
+```
+
+Change numpy version to 1.24.4
+
+## Testing
+
+Command to run before commit for style check:
+```
+pre-commit run --all
+```
+
+Run tests:
+```
+pytest
+```
+Run marked task:
+```
+pytest -m task1_1
+```
+
+## Task 2.5: Training
+
+### Dataset
+Simple Dataset, 50 data points
+
+### Parameters
+- Hidden Layers: 3
+- Learning Rate: 0.5
+- Epochs: 100
+
+### Results
+- Time per epoch
+
+

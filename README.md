@@ -19,7 +19,7 @@ The files that will be synced are:
         minitorch/operators.py minitorch/module.py minitorch/autodiff.py minitorch/scalar.py minitorch/scalar_functions.py minitorch/module.py project/run_manual.py project/run_scalar.py project/datasets.py
 
 
-## Setups
+## Setup
 
 MiniTorch requires Python 3.11 or higher. To check your version of Python, run either:
 ```
@@ -54,7 +54,7 @@ python3 -m pip install -Ue .
 
 Change numpy version to 1.24.4
 
-## Test
+## Testing
 
 Command to run before commit for style check:
 ```
@@ -69,3 +69,18 @@ Run marked task:
 ```
 pytest -m task1_1
 ```
+
+## Task 2.5: Training
+
+### Dataset
+Simple Dataset, 50 data points
+
+### Parameters
+- Hidden Layers: 3
+- Learning Rate: 0.5
+- Epochs: 100
+
+### Results
+- Time per epoch
+
+

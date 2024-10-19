@@ -70,17 +70,160 @@ Run marked task:
 pytest -m task1_1
 ```
 
+```
+streamlit run project/app.py -- 2
+```
+
 ## Task 2.5: Training
 
-### Dataset
+### Simple Dataset 
+
 Simple Dataset, 50 data points
 
-### Parameters
+Time per epoch: 0.045s
+
+Parameters
 - Hidden Layers: 3
 - Learning Rate: 0.5
 - Epochs: 100
 
-### Results
-- Time per epoch
+Results
+- Loss per epoch
+
+![Epoch](./images/simple_epoch.png)
+
+- Loss graph
+
+![Loss](./images/simple_loss.png)
+
+- Classification result
+
+![Classification](./images/simple_res.png)
 
 
+### Diagonal Dataset 
+
+Diagonal Dataset, 50 data points
+
+Time per epoch: 0.044s
+
+Parameters
+- Hidden Layers: 3
+- Learning Rate: 0.5
+- Epochs: 100
+
+Results
+- Loss per epoch
+
+![Epoch](./images/diag_epoch.png)
+
+- Loss graph
+
+![Loss](./images/diag_loss.png)
+
+- Classification result
+
+![Classification](./images/diag_res.png)
+
+
+### Split Dataset 
+
+Split Dataset, 50 data points
+
+Time per epoch: 0.216s
+
+Parameters
+- Hidden Layers: 10
+- Learning Rate: 0.1
+- Epochs: 700
+
+Results
+- Loss per epoch
+
+![Epoch](./images/split_epoch.png)
+
+- Loss graph
+
+![Loss](./images/split_loss.png)
+
+- Classification result
+
+![Classification](./images/split_res.png)
+
+
+
+### Xor Dataset 
+
+Xor Dataset, 50 data points
+
+Time per epoch: 0.462s
+
+Parameters
+- Hidden Layers: 16
+- Learning Rate: 0.1
+- Epochs: 800
+
+Results
+- Loss per epoch
+
+![Epoch](./images/xor_epoch.png)
+
+- Loss graph
+
+![Loss](./images/xor_loss.png)
+
+- Classification result
+
+![Classification](./images/xor_res.png)
+
+
+
+### Circle Dataset 
+
+Circle Dataset, 50 data points
+
+Time per epoch: 0.468s
+
+Parameters
+- Hidden Layers: 16
+- Learning Rate: 0.1
+- Epochs: 500
+
+Results
+- Loss per epoch
+
+![Epoch](./images/circle_epoch.png)
+
+- Loss graph
+
+![Loss](./images/circle_loss.png)
+
+- Classification result
+
+![Classification](./images/circle_res.png)
+
+
+
+### Spiral Dataset 
+
+Spiral Dataset, 150 data points
+
+Time per epoch: 1.897s
+
+Parameters
+- Hidden Layers: 20
+- Learning Rate: 0.05
+- Epochs: 300
+
+Results
+- Loss per epoch
+
+![Epoch](./images/spiral_epoch.png)
+
+- Loss graph
+
+![Loss](./images/spiral_loss.png)
+
+- Classification result
+
+![Classification](./images/spiral_res.png)

@@ -74,13 +74,6 @@ def to_index(ordinal: int, shape: Shape, out_index: OutIndex) -> None:
         curr_ordinal = curr_ordinal // shape[i]
 
 
-"""
-Two tensors are “broadcastable” if the following rules hold:
-Each tensor has at least one dimension.
-When iterating over the dimension sizes, starting at the trailing dimension, the dimension sizes must either be equal, one of them is 1, or one of them does not exist.
-"""
-
-
 def broadcast_index(
     big_index: Index, big_shape: Shape, shape: Shape, out_index: OutIndex
 ) -> None:

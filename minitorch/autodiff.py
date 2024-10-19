@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Iterable, List, Tuple, Protocol, Dict
+from typing import Any, Iterable, List, Tuple, Protocol
 
 
 # ## Task 1.1
@@ -32,7 +32,7 @@ def central_difference(f: Any, *vals: Any, arg: int = 0, epsilon: float = 1e-6) 
     vals1[arg] = vals[arg] + epsilon
     vals2[arg] = vals[arg] - epsilon
     delta = f(*vals1) - f(*vals2)
-    return delta / (2 * epsilon)    
+    return delta / (2 * epsilon)
 
 
 variable_count = 1
@@ -104,10 +104,10 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
                     visit(m)
         seen.add(var.unique_id)
         order.insert(0, var)
-    
+
     visit(variable)
     return order
-       
+
 
 def backpropagate(variable: Variable, deriv: Any) -> None:
     """Runs backpropagation on the computation graph

@@ -143,7 +143,7 @@ class Inv(ScalarFunction):
     def forward(ctx: Context, a: float) -> float:
         """Computes the forward pass of the inverse function."""
         ctx.save_for_backward(a)
-        return operators.inv(a) 
+        return operators.inv(a)
 
     @staticmethod
     def backward(ctx: Context, d_output: float) -> float:

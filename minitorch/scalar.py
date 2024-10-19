@@ -147,8 +147,7 @@ class Scalar:
         ## TODO: Implement for Task 1.3.
         x = h.last_fn._backward(h.ctx, d_output)
         return list(zip(h.inputs, x))
-        
-        
+
     def backward(self, d_output: Optional[float] = None) -> None:
         """Calls autodiff to fill in the derivatives for the history of this object.
 
@@ -189,7 +188,7 @@ class Scalar:
     # Override the greater than (>) operator
     def __gt__(self, b: ScalarLike) -> Scalar:
         return LT.apply(b, self)
-    
+
     # Override the equality (==) operator
     def __eq__(self, b: ScalarLike) -> Scalar:
         return EQ.apply(b, self)

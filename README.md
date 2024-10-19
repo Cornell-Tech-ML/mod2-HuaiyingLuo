@@ -76,7 +76,7 @@ streamlit run project/app.py -- 2
 
 ## Task 2.5: Training
 
-### Simple Dataset 
+### Simple Dataset
 
 Simple Dataset, 50 data points
 
@@ -101,7 +101,7 @@ Results
 ![Classification](./images/simple_res.png)
 
 
-### Diagonal Dataset 
+### Diagonal Dataset
 
 Diagonal Dataset, 50 data points
 
@@ -126,7 +126,7 @@ Results
 ![Classification](./images/diag_res.png)
 
 
-### Split Dataset 
+### Split Dataset
 
 Split Dataset, 50 data points
 
@@ -152,7 +152,7 @@ Results
 
 
 
-### Xor Dataset 
+### Xor Dataset
 
 Xor Dataset, 50 data points
 
@@ -178,7 +178,7 @@ Results
 
 
 
-### Circle Dataset 
+### Circle Dataset
 
 Circle Dataset, 50 data points
 
@@ -204,7 +204,7 @@ Results
 
 
 
-### Spiral Dataset 
+### Spiral Dataset
 
 Spiral Dataset, 150 data points
 

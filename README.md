@@ -77,7 +77,7 @@ streamlit run project/app.py -- 2
 
 ## Task 2.5: Training
 
-### Simple Dataset
+### 1. Simple Dataset
 
 Simple Dataset, 50 data points
 
@@ -102,7 +102,7 @@ Results
 ![Classification](./images/simple_res.png)
 
 
-### Diagonal Dataset
+### 2. Diagonal Dataset
 
 Diagonal Dataset, 50 data points
 
@@ -127,7 +127,7 @@ Results
 ![Classification](./images/diag_res.png)
 
 
-### Split Dataset
+### 3. Split Dataset
 
 Split Dataset, 50 data points
 
@@ -153,7 +153,7 @@ Results
 
 
 
-### Xor Dataset
+### 4. Xor Dataset
 
 Xor Dataset, 50 data points
 
@@ -178,53 +178,3 @@ Results
 ![Classification](./images/xor_res.png)
 
 
-
-### Circle Dataset
-
-Circle Dataset, 50 data points
-
-Time per epoch: 0.468s
-
-Parameters
-- Hidden Layers: 16
-- Learning Rate: 0.1
-- Epochs: 500
-
-Results
-- Loss per epoch
-
-![Epoch](./images/circle_epoch.png)
-
-- Loss graph
-
-![Loss](./images/circle_loss.png)
-
-- Classification result
-
-![Classification](./images/circle_res.png)
-
-
-
-### Spiral Dataset
-
-Spiral Dataset, 150 data points
-
-Time per epoch: 1.897s
-
-Parameters
-- Hidden Layers: 20
-- Learning Rate: 0.05
-- Epochs: 300
-
-Results
-- Loss per epoch
-
-![Epoch](./images/spiral_epoch.png)
-
-- Loss graph
-
-![Loss](./images/spiral_loss.png)
-
-- Classification result
-
-![Classification](./images/spiral_res.png)

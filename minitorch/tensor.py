@@ -111,7 +111,7 @@ class Tensor:
 
     def _ensure_tensor(self, b: TensorLike) -> Tensor:
         """Turns a python number into a tensor with the same backend."""
-        if isinstance(b, (int, float, np.integer, np.floating)):
+        if isinstance(b, (int, float)):
             c = Tensor.make([b], (1,), backend=self.backend)
         else:
             b._type_(self.backend)
@@ -383,7 +383,7 @@ class Tensor:
     def mean(self, dim: Optional[int] = None) -> Tensor:
         """Compute the mean over dimension `dim`"""
         if dim is not None:
-            return self.sum(dim) / self.shape[dim]
+            return self.sum(dim) / int(self.shape[dim])
         else:
             return self.sum() / self.size
 

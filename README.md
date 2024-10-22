@@ -70,6 +70,7 @@ Run marked task:
 pytest -m task1_1
 ```
 
+To run the app:
 ```
 streamlit run project/app.py -- 2
 ```

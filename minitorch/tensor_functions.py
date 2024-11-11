@@ -135,15 +135,13 @@ class Sigmoid(Function):
         """Applies the sigmoid function to the tensor"""
         out = t1.f.sigmoid_map(t1)
         ctx.save_for_backward(out)  # save as a tuple
-        return t1.f.sigmoid_map(t1)
+        return out
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tensor:
         """Applies the chain rule to the tensor"""
-        (sigma,) = ctx.saved_values  # this is a tensor
-        return grad_output.f.mul_zip(
-            grad_output, sigma.f.mul_zip(sigma, (-sigma + tensor([1.0])))
-        )
+        sigma: Tensor = ctx.saved_values[0]  # this is a tensor
+        return sigma * (-sigma + 1.0) * grad_output
 
 
 class ReLU(Function):
@@ -190,19 +188,14 @@ class Exp(Function):
 
 
 class Sum(Function):
-    # ! why do we need to save for backward?
     @staticmethod
     def forward(ctx: Context, t1: Tensor, dim: Tensor) -> Tensor:
         """Applies the sum function to the tensor"""
-        ctx.save_for_backward(t1.shape, dim)
         return t1.f.add_reduce(t1, int(dim.item()))
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, float]:
         """Applies the chain rule to the tensor"""
-        (t1_shape, dim) = ctx.saved_values
-        # each element of the input tensor contributes equally to the sum
-        # so the gradient is the same for each input
         return grad_output, 0.0
 
 
@@ -216,10 +209,8 @@ class LT(Function):
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, Tensor]:
         """Applies the chain rule to the tensor"""
-        (t1_shape, t2_shape) = ctx.saved_values
-        return zeros(t1_shape), zeros(
-            t2_shape
-        )  # The less than operation is non-differentiable
+        t1_shape, t2_shape = ctx.saved_values
+        return zeros(t1_shape), zeros(t2_shape)  # The less than operation is non-differentiable
 
 
 class EQ(Function):
@@ -232,44 +223,34 @@ class EQ(Function):
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, Tensor]:
         """Applies the chain rule to the tensor"""
-        (t1_shape, t2_shape) = ctx.saved_values
-        return zeros(t1_shape), zeros(
-            t2_shape
-        )  # The equal operation is non-differentiable
+        t1_shape, t2_shape = ctx.saved_values
+        return zeros(t1_shape), zeros(t2_shape)  # The equal operation is non-differentiable
 
 
 class IsClose(Function):
     @staticmethod
     def forward(ctx: Context, t1: Tensor, t2: Tensor) -> Tensor:
         """Applies the is close function to the tensor"""
-        ctx.save_for_backward(t1.shape, t2.shape)
         return t1.f.is_close_zip(t1, t2)
-
     # no backward for IsClose
 
 
-# ! this one i still don't get it
 class Permute(Function):
     @staticmethod
     def forward(ctx: Context, t1: Tensor, order: Tensor) -> Tensor:
         """Applies the permutation function to the tensor"""
         # converts the order tensor into a tuple of integers [2, 1] -> (2, 1)
-        ord = tuple(int(order[i]) for i in range(order.size))
-        ctx.save_for_backward(ord)
-        return t1._new(t1._tensor.permute(*ord))
+        ctx.save_for_backward(order)
+        return t1._new(t1._tensor.permute(*[int(order[i]) for i in range(order.size)]))
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, float]:
         """Applies the chain rule to the tensor"""
-        (ord,) = ctx.saved_tensors
-        # Calculate the inverse permutation
-        inv_order = [0] * len(ord)
-        for i, p in enumerate(ord):
-            inv_order[p] = i
-        # Apply the inverse permutation to the gradient
-        grad_input = grad_output._new(grad_output._tensor.permute(*inv_order))
-        return grad_input, 0.0
-
+        order: Tensor = ctx.saved_values[0]
+        order2: List[int] = [a[0] for a in sorted(
+            enumerate([order[i] for i in range(order.size)]), key=lambda a: a[1]
+        )]
+        return grad_output._new(grad_output._tensor.permute(*order2)), 0.0
 
 class View(Function):
     @staticmethod

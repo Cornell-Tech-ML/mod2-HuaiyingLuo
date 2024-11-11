@@ -68,10 +68,11 @@ def to_index(ordinal: int, shape: Shape, out_index: OutIndex) -> None:
 
     """
     # TODO: Implement for Task 2.1.
-    curr_ordinal = ordinal
+    cur_ord = ordinal + 0
     for i in range(len(shape) - 1, -1, -1):
-        out_index[i] = curr_ordinal % shape[i]
-        curr_ordinal = curr_ordinal // shape[i]
+        sh = shape[i]
+        out_index[i] = int(cur_ord % sh)
+        cur_ord = cur_ord // sh
 
 
 def broadcast_index(
@@ -88,7 +89,7 @@ def broadcast_index(
         big_index : multidimensional index of bigger tensor
         big_shape : tensor shape of bigger tensor
         shape : tensor shape of smaller tensor
-        out_index : multidimensional index of smaller tensor. out_index is an array that represents the corresponding index in the smaller tensor of the big tensor indexafter applying broadcasting rules
+        out_index : multidimensional index of smaller tensor. 
 
     Returns:
     -------
@@ -96,11 +97,12 @@ def broadcast_index(
 
     """
     # TODO: Implement for Task 2.2.
-    for i in range(len(shape)):
-        if shape[i] != 1:
+    for i, s in enumerate(shape):
+        if s > 1:
             out_index[i] = big_index[i + len(big_shape) - len(shape)]
         else:
             out_index[i] = 0
+    return None
 
 
 def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
@@ -121,29 +123,23 @@ def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
 
     """
     # TODO: Implement for Task 2.2.
-    # Reverse the shapes to align dimensions from the end
-    shape1 = list(shape1)[::-1]
-    shape2 = list(shape2)[::-1]
-
-    # Determine the maximum length of the two shapes
-    max_len = max(len(shape1), len(shape2))
-
-    # Extend the shorter shape with 1s
-    shape1.extend([1] * (max_len - len(shape1)))
-    shape2.extend([1] * (max_len - len(shape2)))
-
-    # Calculate the broadcasted shape
-    broadcasted_shape = []
-    for dim1, dim2 in zip(shape1, shape2):
-        if dim1 == dim2 or dim1 == 1 or dim2 == 1:
-            broadcasted_shape.append(max(dim1, dim2))
+    a, b = shape1, shape2
+    m = max(len(a), len(b))
+    c_rev = [0] * m
+    a_rev = list(reversed(a))
+    b_rev = list(reversed(b))
+    for i in range(m):
+        if i >= len(a):
+            c_rev[i] = b_rev[i]
+        elif i >= len(b):
+            c_rev[i] = a_rev[i]
         else:
-            raise IndexingError(
-                f"Cannot broadcast shapes {shape1[::-1]} and {shape2[::-1]}."
-            )
-
-    # Reverse the result to restore the original order
-    return tuple(broadcasted_shape[::-1])
+            c_rev[i] = max(a_rev[i], b_rev[i])
+            if a_rev[i] != c_rev[i] and a_rev[i] != 1:
+                raise IndexingError(f"Broadcast Failure {a} {b}")
+            if b_rev[i] != c_rev[i] and b_rev[i] != 1:
+                raise IndexingError(f"Broadcast Failure {a} {b}")
+    return tuple(reversed(c_rev))
 
 
 def strides_from_shape(shape: UserShape) -> UserStrides:
@@ -281,12 +277,11 @@ class TensorData:
         ), f"Must give a position to each dimension. Shape: {self.shape} Order: {order}"
 
         # TODO: Implement for Task 2.1.
-        # Reorder shape and strides according to the order
-        new_shape = tuple(self._shape[i] for i in order)
-        new_strides = tuple(self._strides[i] for i in order)
-
-        # Return a new TensorData object with permuted dimensions
-        return TensorData(self._storage, new_shape, new_strides)
+        return TensorData(
+            self._storage,
+            tuple(self._shape[i] for i in order),
+            tuple(self._strides[i] for i in order)
+            )
 
     def to_string(self) -> str:
         """Convert to string"""
